@@ -7,7 +7,11 @@ export interface UserState {
     data:IUser[],
     errors:any;
     isCreating:boolean;
-    isCreateSuccess:boolean
+    isCreateSuccess:boolean;
+    isUpdating:boolean;
+    isUpdateSuccess:boolean;
+    isDelete:boolean;
+    isDeleteSuccess:boolean;
 }
 
 const initialState: UserState = {
@@ -16,7 +20,11 @@ const initialState: UserState = {
     data:[ ],
     errors:[ ],
     isCreating:false,
-    isCreateSuccess:false
+    isCreateSuccess:false,
+    isUpdating:false,
+    isUpdateSuccess:false,
+    isDelete:false,
+    isDeleteSuccess:false
 }
 export const fetchUserPending=createAction("fetchUserPending");
 export const fetchUserSuccess=createAction<IUser[]>("fetchUserSuccess");
@@ -25,6 +33,14 @@ export const fetchUserFailed=createAction("fetchUserFailed");
 export const createUserPending=createAction<{email:string;name:string}>("createUserPending");
 export const createUserSuccess=createAction("createUserSuccess");
 export const createUserFailed=createAction("createUserFailed");
+
+export const updateUserPending=createAction<{id:number;email:string;name:string}>("updateUserPending");
+export const updateUserSuccess=createAction("updateUserSuccess");
+export const updateUserFailed=createAction("updateUserFailed");
+
+export const deleteUserPending=createAction<{id:number}>("deleteUserPending");
+export const deleteUserSuccess=createAction("deleteUserSuccess");
+export const deleteUserFailed=createAction("deleteUserFailed");
 
 export const userSlice = createSlice({
     name: "user",
@@ -57,6 +73,22 @@ export const userSlice = createSlice({
           .addCase(createUserSuccess, (state,action) => {
            state.isCreating=false;
            state.isCreateSuccess=true;
+          })
+          .addCase(updateUserPending, (state,action) => {
+            state.isUpdating=true;
+            state.isUpdateSuccess=false;
+          })
+          .addCase(updateUserSuccess, (state,action) => {
+           state.isUpdating=false;
+           state.isUpdateSuccess=true;
+          })
+          .addCase(deleteUserPending, (state,action) => {
+            state.isDelete=true;
+            state.isDeleteSuccess=false;
+          })
+          .addCase(deleteUserSuccess, (state,action) => {
+           state.isDelete=false;
+           state.isDeleteSuccess=true;
           })
     },
 })
